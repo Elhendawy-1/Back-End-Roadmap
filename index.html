@@ -4,9 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>.NET Backend Developer Roadmap</title>
+<meta name="description" content="Interactive roadmap for learning .NET backend development: 9 stages from computer science fundamentals to ASP.NET Core, with courses, practice resources, and coupons.">
+<meta property="og:title" content=".NET Backend Developer Roadmap">
+<meta property="og:description" content="Nine stages from computer science fundamentals to ASP.NET Core, with courses, practice, and coupons.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://elhendawy-1.github.io/Back-End-Roadmap/">
+<meta name="theme-color" content="#f5f6fa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%230b1020'/%3E%3Cpath d='M4 22 H11 V15 H17' fill='none' stroke='%238fa3ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='4' cy='22' r='2.4' fill='%238fa3ff'/%3E%3Ccircle cx='17' cy='15' r='2.4' fill='%238fa3ff'/%3E%3Cpath d='M21 10 l2 2 3.5-5' fill='none' stroke='%238fa3ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#f5f6fa;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#dfe3ec;--acc:#4338ca;--onacc:#fff;--soft:#eef0f8;--paid:#8a4205;--paidbg:#fdecd8;--sh:0 1px 2px rgba(17,24,39,.06);
+:root{--bg:#f5f6fa;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#dfe3ec;--acc:#4338ca;--onacc:#fff;--soft:#eef0f8;--paid:#8a4205;--paidbg:#fdecd8;--sh:0 1px 2px rgba(17,24,39,.06);--tr:.18s ease;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--sh:none;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--sh:none;color-scheme:dark}
@@ -41,7 +48,7 @@ h1{font-size:clamp(1.6rem,2.6vw + 1rem,2.6rem);line-height:1.12;letter-spacing:-
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [hidden]{display:none!important}
 nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
-.chip{display:inline-flex;align-items:center;min-height:40px;padding:6px 14px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);text-decoration:none;font-size:.9rem}
+.chip{display:inline-flex;align-items:center;min-height:44px;padding:6px 14px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);text-decoration:none;font-size:.9rem}
 .chip:hover{border-color:var(--acc);color:var(--acc)}
 .chip.next{border-color:var(--acc);color:var(--acc)}
 .contbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-inline-start:4px solid var(--acc);border-radius:14px;box-shadow:var(--sh);padding:14px 16px;margin:0 0 14px}
@@ -103,6 +110,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 @media (max-width:768px){.topbar{position:static}.tools{position:sticky;top:0;z-index:6}}
 @media (max-width:480px){.bar2{flex-wrap:wrap}.brand{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}}
+@media print{.topbar,.tools,.contbar,#totop,.mark,.acts{display:none!important}.stage,.card{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -112,7 +120,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 <p class="lead">Nine stages from computer science fundamentals to ASP.NET Core. Each stage lists a main resource, alternatives and practice. Where a lesson list was not readable, the card says so.</p></header>
 <div class="contbar" id="contbar"><span id="contText" role="status" aria-live="polite"></span><button id="cont" class="btn" type="button">Continue</button></div>
 <div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><button id="reset" class="btn ghost" type="button">Reset progress</button></div>
-<p id="empty" class="lead" hidden>No resources match your search.</p>
+<p id="empty" class="lead" role="status" hidden>No resources match your search.</p>
 <nav id="nav" aria-label="Roadmap stages"></nav>
 <main id="stages"></main>
 
@@ -160,13 +168,13 @@ r:[["Mastering ASP.NET Core: Concepts to Production-Ready APIs","https://www.met
 ["Secure Your APIs: JWT, Roles & Policies",PA+"secure-api-jwt","alt",1,"Covers API security only, not general ASP.NET Core. Continues from a prior RESTful APIs course."]]}
 ];
 var TYPE={main:"Main Course",alt:"Alternative",practice:"Practice"};
-var cs=document.getElementById("cs"),tm=null;
+var cs=document.getElementById("cs");
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
 function plat(u){return u.indexOf("youtube.com")>-1?"YouTube":u.indexOf("programmingadvices")>-1?"ProgrammingAdvices":u.indexOf("udemy.com")>-1?"Udemy":u.indexOf("metigator.com")>-1?"Metigator":"Web";}
 function label(r){var p=plat(r[1]);if(r[3])return "Get Course";if(r[2]==="practice")return "Practice";if(r[2]==="alt")return "Open Alternative";return p==="YouTube"?"Watch Course":"Start Course";}
 function copy(code,btn){
 var orig=btn.getAttribute("data-l")||btn.textContent;btn.setAttribute("data-l",orig);
-function ok(){cs.textContent="Copied: "+code;btn.textContent="Copied";clearTimeout(tm);tm=setTimeout(function(){btn.textContent=orig;},1600);}
+function ok(){cs.textContent="Copied: "+code;btn.textContent="Copied";if(btn._tm)clearTimeout(btn._tm);btn._tm=setTimeout(function(){btn.textContent=orig;btn._tm=null;},1600);}
 function fail(){cs.textContent="Copy failed. Select the code manually: "+code;}
 try{navigator.clipboard.writeText(code).then(ok,fail);}catch(e){fail();}}
 function copyBtn(code,txt){var b=el("button","btn ghost",txt);b.type="button";b.setAttribute("aria-label",txt+" "+code);b.addEventListener("click",function(){copy(code,b);});return b;}
@@ -230,6 +238,9 @@ function filter(){var q=qe.value.trim().toLowerCase(),any=0;
 stg.forEach(function(st,i){var sm=!q||(S[i].n+" "+S[i].d).toLowerCase().indexOf(q)>-1,v=0;
 st.querySelectorAll(".card").forEach(function(c){var ok=sm||c.textContent.toLowerCase().indexOf(q)>-1;c.hidden=!ok;if(ok)v++;});
 st.hidden=!v;chips[i].hidden=!v;if(v)any++;});
+var csec=document.getElementById("coupons"),cmatch=0;
+cg.querySelectorAll(".card").forEach(function(c){var ok=!q||c.textContent.toLowerCase().indexOf(q)>-1;c.hidden=!ok;if(ok)cmatch++;});
+csec.hidden=!cmatch;if(cmatch)any++;
 em.hidden=!!any;}
 qe.addEventListener("input",filter);
 function setPad(){var t=document.querySelector(".tools");if(window.innerWidth<=768&&t){var h=Math.ceil(t.getBoundingClientRect().height+12);document.documentElement.style.scrollPaddingTop="calc(env(safe-area-inset-top,0px) + "+h+"px)";}else{document.documentElement.style.scrollPaddingTop="";}}
