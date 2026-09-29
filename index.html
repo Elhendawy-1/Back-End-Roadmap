@@ -135,17 +135,18 @@ body.locked .topbar,body.locked .wrap,body.locked #totop{filter:blur(6px);pointe
 @media (max-width:768px){.topbar{position:static}.tools{position:sticky;top:0;z-index:6}}
 @media (max-width:480px){.bar2{flex-wrap:wrap}.brand{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}}
-@media print{.topbar,.tools,.contbar,#totop,.mark,.acts{display:none!important}.stage,.card{break-inside:avoid}}
+@media print{.topbar,.tools,.contbar,#totop,.mark,.acts,.auth-overlay{display:none!important}.stage,.card{break-inside:avoid}}
 </style>
 </head>
-<body>
+<body class="locked">
+<noscript><p style="padding:20px;text-align:center">This roadmap needs JavaScript to run. Please enable it and reload.</p></noscript>
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <div class="auth-logo" id="authTitle"><svg class="logo" width="30" height="30" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path class="path" d="M4 22 H11 V15 H17"/><circle class="node" cx="4" cy="22" r="2.4"/><circle class="node" cx="17" cy="15" r="2.4"/><path class="tick" d="M21 10 l2 2 3.5-5"/></svg><span>.NET Roadmap</span></div>
     <p class="auth-sub">Login to access your roadmap</p>
-    <div class="auth-tabs" role="tablist">
-      <button class="auth-tab active" id="tabLogin" role="tab" type="button" onclick="switchAuthTab('login')">Login</button>
-      <button class="auth-tab" id="tabSignup" role="tab" type="button" onclick="switchAuthTab('signup')">Sign Up</button>
+    <div class="auth-tabs" role="group" aria-label="Choose login or sign up">
+      <button class="auth-tab active" id="tabLogin" type="button" onclick="switchAuthTab('login')">Login</button>
+      <button class="auth-tab" id="tabSignup" type="button" onclick="switchAuthTab('signup')">Sign Up</button>
     </div>
     <div class="auth-error" id="authError" role="alert"></div>
     <div class="auth-field">
@@ -276,17 +277,18 @@ function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_K))||{};}ca
 function saveUsers(u){try{localStorage.setItem(USERS_K,JSON.stringify(u));}catch(e){}}
 function makeSalt(){try{var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(b){return ("0"+b.toString(16)).slice(-2);}).join("");}catch(e){return ""+Date.now()+Math.random();}}
 function hashPassword(pass,salt){
-try{
-if(window.crypto&&crypto.subtle){
-var data=new TextEncoder().encode(salt+":"+pass);
-return crypto.subtle.digest("SHA-256",data).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ("0"+b.toString(16)).slice(-2);}).join("");});
-}
-}catch(e){}
-var h1=0xdeadbeef,h2=0x41c6ce57,s=salt+":"+pass;
+function fallback(){var h1=0xdeadbeef,h2=0x41c6ce57,s=salt+":"+pass;
 for(var i=0;i<s.length;i++){var ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
 h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
 h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
-return Promise.resolve((h2>>>0).toString(16)+(h1>>>0).toString(16));
+return (h2>>>0).toString(16)+(h1>>>0).toString(16);}
+try{
+if(window.crypto&&crypto.subtle){
+var data=new TextEncoder().encode(salt+":"+pass);
+return crypto.subtle.digest("SHA-256",data).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ("0"+b.toString(16)).slice(-2);}).join("");}).catch(function(){return fallback();});
+}
+}catch(e){}
+return Promise.resolve(fallback());
 }
 function showAuthError(m){var e=document.getElementById("authError");e.textContent=m;e.classList.add("show");}
 function clearAuthError(){document.getElementById("authError").classList.remove("show");}
@@ -297,8 +299,9 @@ document.getElementById("confirmWrap").style.display=mode==="signup"?"":"none";
 document.getElementById("authModeHint").textContent=mode==="signup"?"Create your account":"Welcome back";
 document.getElementById("authSubmit").textContent=mode==="signup"?"Sign Up":"Login";}
 function toggleAuthPassword(btn){var p=document.getElementById("authPass"),c=document.getElementById("authConfirm"),show=p.type==="password";p.type=show?"text":"password";c.type=show?"text":"password";if(btn)btn.textContent=show?"Hide password":"Show password";}
-function lockUI(){document.getElementById("authOverlay").classList.remove("hidden");document.body.classList.add("locked");document.getElementById("userChip").style.display="none";}
-function unlockUI(){document.getElementById("authOverlay").classList.add("hidden");document.body.classList.remove("locked");var chip=document.getElementById("userChip");chip.style.display="";document.getElementById("userName").textContent=currentUserDisplay;document.getElementById("authPass").value="";document.getElementById("authConfirm").value="";}
+function setInert(locked){[".topbar",".wrap","#totop"].forEach(function(sel){var n=document.querySelector(sel);if(!n)return;if(locked){n.setAttribute("inert","");n.setAttribute("aria-hidden","true");}else{n.removeAttribute("inert");n.removeAttribute("aria-hidden");}});}
+function lockUI(){document.getElementById("authOverlay").classList.remove("hidden");document.body.classList.add("locked");document.getElementById("userChip").style.display="none";setInert(true);var u=document.getElementById("authUser");if(u)u.focus();}
+function unlockUI(){document.getElementById("authOverlay").classList.add("hidden");document.body.classList.remove("locked");setInert(false);var chip=document.getElementById("userChip");chip.style.display="";document.getElementById("userName").textContent=currentUserDisplay;document.getElementById("authUser").value="";document.getElementById("authPass").value="";document.getElementById("authConfirm").value="";}
 function submitAuth(){clearAuthError();
 var rawU=document.getElementById("authUser").value.trim(),pass=document.getElementById("authPass").value,confirm=document.getElementById("authConfirm").value;
 if(!/^[A-Za-z0-9_.]{3,32}$/.test(rawU)){showAuthError("Username: 3-32 chars, letters/numbers/._ only.");return Promise.resolve();}
@@ -356,7 +359,7 @@ csec.hidden=!cmatch;if(cmatch)any++;
 em.hidden=!!any;}
 qe.addEventListener("input",filter);
 ["authUser","authPass","authConfirm"].forEach(function(id){document.getElementById(id).addEventListener("keydown",function(e){if(e.key==="Enter")submitAuth();});});
-function setPad(){var t=document.querySelector(".tools");if(window.innerWidth<=768&&t){var h=Math.ceil(t.getBoundingClientRect().height+12);document.documentElement.style.scrollPaddingTop="calc(env(safe-area-inset-top,0px) + "+h+"px)";}else{document.documentElement.style.scrollPaddingTop="";}}
+function setPad(){var t=window.innerWidth<=768?document.querySelector(".tools"):document.querySelector(".topbar");if(!t){document.documentElement.style.scrollPaddingTop="";return;}var h=Math.ceil(t.getBoundingClientRect().height+12);document.documentElement.style.scrollPaddingTop="calc(env(safe-area-inset-top,0px) + "+h+"px)";}
 window.addEventListener("resize",setPad);setPad();
 var totop=document.getElementById("totop");
 window.addEventListener("scroll",function(){totop.hidden=window.scrollY<600;},{passive:true});
