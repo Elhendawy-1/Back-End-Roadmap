@@ -2,7 +2,7 @@
 
 An interactive roadmap website for learning .NET backend development, stage by stage.
 
-**Live page:** https://elhendawy-1.github.io/Back-End-Roadmap/
+**Live page:** <a href="https://elhendawy-1.github.io/Back-End-Roadmap/" target="_blank" rel="noopener">https://elhendawy-1.github.io/Back-End-Roadmap/</a>
 
 ## Description
 
