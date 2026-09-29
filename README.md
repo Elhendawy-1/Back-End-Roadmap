@@ -6,110 +6,76 @@ An interactive roadmap website for learning .NET backend development, stage by s
 
 ## Description
 
-This website provides a structured learning path for students who want to become .NET Backend Developers. Instead of collecting links, it organizes concepts progressively — foundations first, then backend core skills, architecture, production practices, and a final capstone project — so you always know what to learn next.
+This website provides a structured learning path for students who want to become .NET Backend Developers. It organizes nine stages — from computer science fundamentals to ASP.NET Core — each with hand-picked learning resources, so you always know what to learn next.
 
-## Main Goals
+## Roadmap Stages
 
-- Provide a structured .NET backend learning path.
-- Help students understand what to learn next.
-- Organize courses and learning resources in one place.
-- Track learning progress per student.
-- Make the learning journey simple and easy to follow.
-- Provide both free and paid learning resources.
-- Include practice resources and a real project where available.
+1. Computer Science Fundamentals
+2. C# Fundamentals
+3. C# Object-Oriented Programming
+4. SQL
+5. SOLID Principles
+6. Design Patterns
+7. LINQ
+8. Entity Framework Core
+9. ASP.NET Core
 
-## Roadmap Structure
-
-The roadmap is organized into **23 stages** grouped into **5 visual phases**, with **97 checkable learning topics** in total.
-
-> Note: 22 stages carry topic checklists (97 topics). Computer Science Fundamentals is a resource-only guide stage with no checklist.
-
-| Phase | What it covers |
-| --- | --- |
-| 1. Foundations | Starting point: computer science basics, Git, the C# language, databases, LINQ, and SOLID principles. |
-| 2. Backend Core | Building real APIs: communication protocols, REST, ASP.NET Core, ORM / Entity Framework Core, security with JWT, and API documentation. |
-| 3. Architecture | Writing code that lasts: design patterns, the Result pattern, domain modeling, clean architecture, and CQRS. |
-| 4. Production | Shipping with confidence: testing, performance, observability, Docker, and CI with GitHub Actions. |
-| 5. Capstone | Putting it all together in one full real project (Mechanic Shop Workshop Management System). |
+Each stage shows a description, a resource count, a "Mark stage complete" toggle, and its resource cards.
 
 ## Learning Resources
 
-Stages that have resources show them inside the stage panel, grouped by type:
+Every resource card shows:
 
-- **Main Course** — the recommended resource for the stage.
-- **Alternative** — a different course covering the same stage.
-- **Practice** — exercises and project-based practice.
-- **Paid** — clearly marked paid courses.
-- **Coupon** — coupon-based courses with a copyable code.
+- Course title and resource type: Main Course, Alternative, or Practice
+- Paid/Free indicator
+- Platform name (YouTube, ProgrammingAdvices, Udemy, Metigator)
+- Notes such as video counts or prerequisites, when known
+- A clear action button: Watch Course, Start Course, Practice, Open Alternative, or Get Course
+- A copyable coupon code, where one applies
 
-Resources come from YouTube, ProgrammingAdvices, and Udemy. The website itself contains the complete, up-to-date links — open any stage to see them. URLs are never shown as raw text; every resource has a clear action button (Start Course, Open Alternative, Start Practice, Get Course).
+All links open in a new tab. The website itself contains the complete, up-to-date links.
+
+## Coupons
+
+A dedicated section holds coupon codes for Eng. Mohamed Abu Hadhoud's courses on programmingadvices.com, with one-tap copy buttons (English and Arabic instructions included).
 
 ## Features
 
-- Interactive roadmap with 23 stages and 97 topics.
-- Topic completion checkboxes with per-stage progress indicators.
-- Overall roadmap progress bar.
-- Continue banner that points to the next recommended stage.
-- Recommended learning path with current-stage highlighting.
-- Search across stages, topics, and resources.
-- Phase navigation with scroll highlighting.
-- Slide-in stage panels with topics and resource cards.
-- Dark mode and light mode (follows system preference by default).
-- Responsive, mobile-friendly single-column layout (no horizontal scrolling).
-- Login gate with per-user progress and logout.
-- Reset progress (per user, with confirmation).
-- Paid course indicators and a dedicated coupon section with copy buttons.
+- Continue banner that names the next unfinished stage
+- Stage navigation with completed (✓), up-next (→), and upcoming (○) states
+- Search across stages, descriptions, and resource cards
+- "Mark stage complete" toggles with a completed medallion per stage
+- Per-stage resource counts
+- Balanced responsive card grids (1, 2, or 3 columns by resource count)
+- Double-tap reset progress with confirmation
+- Light mode and Night mode (follows system preference, remembers your choice)
+- Sticky search toolbar on mobile, back-to-top button
+- Smooth scrolling with reduced-motion support
+- Fully responsive down to 360px with 44px touch targets
+- Inline SVG logo with matching browser-tab favicon
 
 ## Progress System
 
-Progress is tracked per logged-in user:
-
-- Each checked topic is stored under that user's account.
-- Stage cards show completed/total topics and a progress bar.
-- Each phase shows its own aggregate progress.
-- The header shows overall completion across all 97 topics.
-
-All data is stored in the browser's **localStorage** — accounts, sessions, theme preference, and progress never leave the device. There is no server or database. Clearing browser storage removes accounts and progress.
-
-## Recommended Learning Path
-
-The Continue banner and the highlighted "Up next" card follow a recommended learning order (for example: Computer Science Fundamentals → Git → C# → … → Capstone). This order only drives the suggestion — it does not renumber stages or change stored progress.
-
-## Responsive Design
-
-The layout adapts from large desktop screens down to 360px phones:
-
-- Multi-column card grids on desktop, fewer columns on tablets.
-- Single-column learning path on mobile with full-width touch-friendly buttons.
-- Sticky controls wrap instead of overflowing; the stage panel becomes a full-screen sheet on small screens.
-
-## Themes
-
-- **Dark mode** (default) and **light mode**, switchable from the toolbar.
-- Colors, contrast, cards, buttons, badges, and coupon components are styled for both themes.
+Progress is a simple per-stage checklist stored in the browser's **localStorage** under the key `roadmap-progress-v1`. Theme choice is stored as `roadmap-theme`. There is no account, server, or database — clearing browser storage removes progress and settings.
 
 ## Technology Stack
 
-- HTML5, CSS3, vanilla JavaScript — no frameworks, no CSS/JS libraries.
-- Browser `localStorage` for accounts, sessions, theme, and progress.
-- Web Crypto API (SHA-256) for password hashing, with a built-in fallback.
-- The only external asset is the Inter font from Google Fonts.
+- One self-contained `index.html` file: HTML, CSS, and vanilla JavaScript
+- No frameworks, no CSS/JS libraries (the only external asset is the system font stack — no webfont download)
+- Browser `localStorage` for progress and theme
+- Clipboard API for coupon copy buttons, with a manual-select fallback
 
 ## Project Structure
 
 ```text
 .
-├── index.html        # Page structure: login gate, header, controls, panels, modals
-├── css/
-│   └── styles.css    # Theme, layout, components, responsive breakpoints
-└── js/
-    ├── data.js       # Phases, stages, topics, resources, coupons, learning order
-    └── app.js        # Rendering, auth, progress, search, panel, theme logic
+├── index.html        # The entire website: markup, styles, data, and logic
+└── README.md         # This file
 ```
 
-- To add or change a resource, edit `js/data.js` only.
-- To change the look, edit `css/styles.css` only.
-- Stage indexes (`0–22`) and progress keys must stay stable — renumbering a stage would orphan existing users' saved progress.
+- To add or change a resource, edit the `S` data array in the `<script>` section.
+- To add a coupon code, edit the `codes` array.
+- Stage order defines navigation, Continue behavior, and saved progress — do not reorder stages without resetting stored progress.
 
 ## Run Locally
 
@@ -120,21 +86,21 @@ No build step and no server required:
 
 ## Usage
 
-1. Sign up with a username and password (stored only in your browser), then log in.
-2. The Continue banner shows where to start — click it to open the stage.
-3. Work through topics, checking them off as you finish; progress saves automatically.
-4. Use search or the phase pills to jump around; switch theme from the toolbar.
-5. Log out from the user chip; use Reset Progress to start a stage list over.
+1. Follow the Continue banner — it always points at your next unfinished stage.
+2. Open a resource card button to start learning (links open in a new tab).
+3. Tick "Mark stage complete" as you finish each stage; progress saves automatically.
+4. Use search or the stage pills to jump around; switch Light/Night from the top bar.
+5. Reset progress needs two taps to confirm.
 
 ## Contributing
 
-- Keep stage indexes and topic order stable (progress keys depend on them).
-- Do not invent durations, prerequisites, or course claims — only add resources that were actually provided.
-- Mark paid resources as `paid` and coupon resources with their exact code.
+- Do not reorder, rename, or remove stages (saved progress depends on their order).
+- Only add resources and codes that were actually provided; never invent course details.
+- Keep the single-file structure and avoid adding libraries.
 - Test both themes and a 360px viewport before submitting changes.
 
 ## Notes on Resources
 
-- All course links, titles, and the coupon code (`MT260928G2ANEW`) are used exactly as provided by the roadmap owner.
+- Course titles, notes, links, and coupon codes are used exactly as provided.
 - The Udemy ASP.NET Core 10 link opens with its coupon applied; the code is also shown with a copy button.
-- Stages without a provided resource yet display a "coming soon" placeholder.
+- Some cards honestly state "Content not checked" or "Lesson list not visible" where the source page could not be read.
