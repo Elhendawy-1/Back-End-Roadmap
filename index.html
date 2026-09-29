@@ -38,8 +38,6 @@ h1{font-size:clamp(1.6rem,2.6vw + 1rem,2.6rem);line-height:1.12;letter-spacing:-
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 16px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh)}
 #q{flex:1 1 240px;min-width:0;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
 #q:focus-visible,.mark input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-.bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:4px}
-.bar i{display:block;height:100%;width:0;background:var(--acc)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 [hidden]{display:none!important}
 nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
@@ -49,9 +47,6 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .contbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-inline-start:4px solid var(--acc);border-radius:14px;box-shadow:var(--sh);padding:14px 16px;margin:0 0 14px}
 .contbar span{font-weight:700;overflow-wrap:anywhere}
 .rescount{color:var(--mute);font-size:.85rem;margin:0 0 10px}
-.sprog{display:flex;align-items:center;gap:10px;margin:0 0 14px}
-.sprog .bar{flex:1}
-.spct{font-size:.76rem;color:var(--mute);white-space:nowrap}
 .totop{position:fixed;bottom:18px;inset-inline-end:18px;z-index:50;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:1.2rem;line-height:1;cursor:pointer;box-shadow:var(--sh)}
 .totop:hover{border-color:var(--acc);color:var(--acc)}
 .stage{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh);padding:clamp(16px,3vw,26px);margin:0 0 28px}
@@ -186,7 +181,6 @@ var m=el("label","mark"),cb=document.createElement("input");cb.type="checkbox";c
 st.appendChild(top);
 st.appendChild(el("p","desc",s.d));
 var rc=s.r.length;st.appendChild(el("p","rescount",rc===0?"No resources yet":rc+(rc===1?" resource":" resources")));
-var sp=el("div","sprog");sp.id="sprog"+i;var sb=el("div","bar");sb.id="sbar"+i;sb.setAttribute("role","progressbar");sb.setAttribute("aria-label",s.n+" progress");sb.setAttribute("aria-valuemin","0");sb.setAttribute("aria-valuemax","100");sb.setAttribute("aria-valuenow","0");sb.setAttribute("aria-valuetext",s.n+" not started, 0 percent");var fi=el("i","");fi.id="sfill"+i;sb.appendChild(fi);sp.appendChild(sb);var sx=el("span","spct","Not started \u00B7 0%");sx.id="spct"+i;sp.appendChild(sx);st.appendChild(sp);
 var g=el("div","grid");g.className="grid cols-"+(s.r.length===4?2:Math.min(s.r.length,3));
 s.r.forEach(function(r){
 var card=el("article","card"+(r[2]==="main"?" main":""));
@@ -215,13 +209,8 @@ try{done=JSON.parse(localStorage.getItem(K)||"{}")||{};}catch(e){done={};}
 var cbs=root.querySelectorAll("input[data-i]"),chips=nav.querySelectorAll(".chip"),stg=root.querySelectorAll(".stage");
 var qe=document.getElementById("q"),em=document.getElementById("empty");
 function getNextStage(){for(var i=0;i<S.length;i++){if(!done[i])return i;}return -1;}
-var contText=document.getElementById("contText"),contBtn=document.getElementById("cont"),pbar=document.getElementById("pbar");
+var contText=document.getElementById("contText"),contBtn=document.getElementById("cont");
 function paint(){var next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);mts[i].textContent=d?"Completed":"Mark stage complete";
-var f=document.getElementById("sfill"+i),tx=document.getElementById("spct"+i),bb=document.getElementById("sbar"+i),sw=document.getElementById("sprog"+i);
-if(sw)sw.hidden=d;
-if(f)f.style.width=d?"100%":"0%";
-if(tx)tx.textContent=d?"Completed \u00B7 100%":"Not started \u00B7 0%";
-if(bb){bb.setAttribute("aria-valuenow",d?"100":"0");bb.setAttribute("aria-valuetext",d?S[i].n+" completed, 100 percent":S[i].n+" not started, 0 percent");}
 if(d){chips[i].textContent="\u2713 "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", completed");chips[i].removeAttribute("aria-current");}
 else if(i===next){chips[i].textContent="\u2192 "+(i+1)+". "+S[i].n+" \u00B7 Up next";chips[i].setAttribute("aria-label",S[i].n+", up next");chips[i].setAttribute("aria-current","step");}
 else{chips[i].textContent="\u25CB "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", not started");chips[i].removeAttribute("aria-current");}
