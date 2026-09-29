@@ -50,11 +50,18 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .stage{margin:0 0 36px}
 .stage h2{display:flex;gap:12px;align-items:center;font-size:clamp(1.15rem,1vw + 1rem,1.5rem);line-height:1.25;margin:0 0 8px;letter-spacing:-.01em}
 .num{display:inline-grid;place-items:center;min-width:2.3rem;height:2.3rem;padding:0 6px;border-radius:10px;background:var(--soft);color:var(--acc);font-weight:800;font-size:1rem;flex:none}
-.stage.is-done .num{background:var(--acc);color:var(--onacc)}
-.stage.is-done .num::after{content:"\2713";margin-inline-start:2px}
+.stage.is-done .num{background:var(--acc);color:var(--onacc);font-size:0}
+.stage.is-done .num::after{content:"\2713";font-size:1.15rem;font-weight:800}
 .desc{color:var(--mute);margin:0 0 10px;max-width:75ch}
-.mark{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin:0 0 8px;cursor:pointer;font-weight:600}
-.mark input{width:22px;height:22px;accent-color:var(--acc);cursor:pointer}
+.mark{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin:0 0 8px;padding:8px 18px 8px 10px;border:1.5px solid var(--line);border-radius:99px;background:var(--card);cursor:pointer;font-weight:600;transition:border-color var(--tr),background var(--tr)}
+.mark:hover{border-color:var(--acc)}
+.stage.is-done .mark{border-color:var(--acc);background:var(--soft)}
+.mark input{appearance:none;-webkit-appearance:none;flex:none;width:24px;height:24px;margin:0;border:2px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;display:grid;place-content:center;transition:background var(--tr),border-color var(--tr)}
+.mark:hover input{border-color:var(--acc)}
+.mark input:checked{background:var(--acc);border-color:var(--acc)}
+.mark input:checked::after{content:"\2713";color:var(--onacc);font-size:.9rem;font-weight:800;line-height:1}
+.mark input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.mark-txt{font-size:.92rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:14px}
 .card{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
 .card.main{border-top:4px solid var(--acc)}
@@ -147,7 +154,7 @@ function ok(){cs.textContent="Copied: "+code;btn.textContent="Copied";clearTimeo
 function fail(){cs.textContent="Copy failed. Select the code manually: "+code;}
 try{navigator.clipboard.writeText(code).then(ok,fail);}catch(e){fail();}}
 function copyBtn(code,txt){var b=el("button","btn ghost",txt);b.type="button";b.setAttribute("aria-label",txt+" "+code);b.addEventListener("click",function(){copy(code,b);});return b;}
-var root=document.getElementById("stages"),nav=document.getElementById("nav");
+var root=document.getElementById("stages"),nav=document.getElementById("nav"),mts=[];
 S.forEach(function(s,i){
 var id="stage-"+(i+1);
 var c=el("a","chip",(i+1)+". "+s.n);c.href="#"+id;nav.appendChild(c);
@@ -155,7 +162,7 @@ var st=el("section","stage");st.id=id;st.setAttribute("aria-labelledby",id+"-h")
 var h=el("h2");h.id=id+"-h";h.appendChild(el("span","num",String(i+1)));h.appendChild(el("span","",s.n));st.appendChild(h);
 st.appendChild(el("p","desc",s.d));
 var rc=s.r.length;st.appendChild(el("p","rescount",rc===0?"No resources yet":rc+(rc===1?" resource":" resources")));
-var m=el("label","mark"),cb=document.createElement("input");cb.type="checkbox";cb.setAttribute("data-i",i);m.appendChild(cb);m.appendChild(el("span","","Mark stage complete"));st.appendChild(m);
+var m=el("label","mark"),cb=document.createElement("input");cb.type="checkbox";cb.setAttribute("data-i",i);m.appendChild(cb);var mt=el("span","mark-txt","Mark stage complete");m.appendChild(mt);mts.push(mt);st.appendChild(m);
 var g=el("div","grid");
 s.r.forEach(function(r){
 var card=el("article","card"+(r[2]==="main"?" main":""));
@@ -183,7 +190,7 @@ var cbs=root.querySelectorAll("input[data-i]"),chips=nav.querySelectorAll(".chip
 var pt=document.getElementById("pt"),pb=document.getElementById("pb"),qe=document.getElementById("q"),em=document.getElementById("empty");
 function getNextStage(){for(var i=0;i<S.length;i++){if(!done[i])return i;}return -1;}
 var contText=document.getElementById("contText"),contBtn=document.getElementById("cont"),pbar=document.getElementById("pbar");
-function paint(){var n=0,next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);
+function paint(){var n=0,next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);mts[i].textContent=d?"Completed":"Mark stage complete";
 if(d){chips[i].textContent="\u2713 "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", completed");chips[i].removeAttribute("aria-current");}
 else if(i===next){chips[i].textContent="\u2192 "+(i+1)+". "+S[i].n+" \u00B7 Up next";chips[i].setAttribute("aria-label",S[i].n+", up next");chips[i].setAttribute("aria-current","step");}
 else{chips[i].textContent="\u25CB "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", not started");chips[i].removeAttribute("aria-current");}
