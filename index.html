@@ -67,9 +67,13 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .mark input:checked::after{content:"\2713";color:var(--onacc);font-size:.9rem;font-weight:800;line-height:1}
 .mark input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .mark-txt{font-size:.92rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;align-items:stretch}
-@media(min-width:1024px){.grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px}}
-@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.grid{display:grid;gap:14px;align-items:stretch}
+.cols-1{grid-template-columns:minmax(0,1fr)}
+.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(min-width:1024px){.grid{gap:16px}}
+@media(max-width:1023px){.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.cols-1,.cols-2,.cols-3{grid-template-columns:minmax(0,1fr)}}
 .card{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
 .card.main{border-top:4px solid var(--acc)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
@@ -172,7 +176,7 @@ var m=el("label","mark"),cb=document.createElement("input");cb.type="checkbox";c
 st.appendChild(top);
 st.appendChild(el("p","desc",s.d));
 var rc=s.r.length;st.appendChild(el("p","rescount",rc===0?"No resources yet":rc+(rc===1?" resource":" resources")));
-var g=el("div","grid");
+var g=el("div","grid");g.className="grid cols-"+(s.r.length===4?2:Math.min(s.r.length,3));
 s.r.forEach(function(r){
 var card=el("article","card"+(r[2]==="main"?" main":""));
 var tags=el("div","tags");
