@@ -38,7 +38,6 @@ h1{font-size:clamp(1.6rem,2.6vw + 1rem,2.6rem);line-height:1.12;letter-spacing:-
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 16px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh)}
 #q{flex:1 1 240px;min-width:0;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
 #q:focus-visible,.mark input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-.prog{flex:1 1 200px;min-width:0;font-size:.9rem;color:var(--mute)}
 .bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:4px}
 .bar i{display:block;height:100%;width:0;background:var(--acc)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -105,7 +104,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .ar{direction:rtl;text-align:right;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .ar h2{font-size:1.1rem;margin:0 0 6px}.ar p{color:var(--mute);margin:0}
 #cs{min-height:1.5em;color:var(--mute);margin:10px 0 0}
-@media (max-width:560px){.acts .btn{flex:1 1 100%}#q{flex:1 1 100%}.prog{flex:1 1 0;min-width:0}#reset{flex:1 1 auto;white-space:nowrap}.stage h2{gap:8px}.seg button{padding:8px 11px}.contbar{flex-direction:column;align-items:stretch}.contbar .btn{width:100%}}
+@media (max-width:560px){.acts .btn{flex:1 1 100%}#q{flex:1 1 100%}#reset{flex:0 1 auto;white-space:nowrap}.stage h2{gap:8px}.seg button{padding:8px 11px}.contbar{flex-direction:column;align-items:stretch}.contbar .btn{width:100%}}
 @media (max-width:768px){.topbar{position:static}.tools{position:sticky;top:0;z-index:6}}
 @media (max-width:480px){.bar2{flex-wrap:wrap}.brand{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}}
@@ -117,7 +116,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 <header><h1>.NET Backend Developer Roadmap</h1>
 <p class="lead">Nine stages from computer science fundamentals to ASP.NET Core. Each stage lists a main resource, alternatives and practice. Where a lesson list was not readable, the card says so.</p></header>
 <div class="contbar" id="contbar"><span id="contText" role="status" aria-live="polite"></span><button id="cont" class="btn" type="button">Continue</button></div>
-<div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><div class="prog"><span id="pt" role="status" aria-live="polite">0 of 9 stages done</span><div class="bar" id="pbar" role="progressbar" aria-label="Roadmap progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0 of 9 stages completed, 0 percent"><i id="pb"></i></div></div><button id="reset" class="btn ghost" type="button">Reset progress</button></div>
+<div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><button id="reset" class="btn ghost" type="button">Reset progress</button></div>
 <p id="empty" class="lead" hidden>No resources match your search.</p>
 <nav id="nav" aria-label="Roadmap stages"></nav>
 <main id="stages"></main>
@@ -214,10 +213,10 @@ cg.className="cgrid cols-"+(codes.length===4?2:Math.min(codes.length,3));
 var K="roadmap-progress-v1",done={};
 try{done=JSON.parse(localStorage.getItem(K)||"{}")||{};}catch(e){done={};}
 var cbs=root.querySelectorAll("input[data-i]"),chips=nav.querySelectorAll(".chip"),stg=root.querySelectorAll(".stage");
-var pt=document.getElementById("pt"),pb=document.getElementById("pb"),qe=document.getElementById("q"),em=document.getElementById("empty");
+var qe=document.getElementById("q"),em=document.getElementById("empty");
 function getNextStage(){for(var i=0;i<S.length;i++){if(!done[i])return i;}return -1;}
 var contText=document.getElementById("contText"),contBtn=document.getElementById("cont"),pbar=document.getElementById("pbar");
-function paint(){var n=0,next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);mts[i].textContent=d?"Completed":"Mark stage complete";
+function paint(){var next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);mts[i].textContent=d?"Completed":"Mark stage complete";
 var f=document.getElementById("sfill"+i),tx=document.getElementById("spct"+i),bb=document.getElementById("sbar"+i);
 if(f)f.style.width=d?"100%":"0%";
 if(tx)tx.textContent=d?"Completed \u00B7 100%":"Not started \u00B7 0%";
@@ -225,10 +224,7 @@ if(bb){bb.setAttribute("aria-valuenow",d?"100":"0");bb.setAttribute("aria-valuet
 if(d){chips[i].textContent="\u2713 "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", completed");chips[i].removeAttribute("aria-current");}
 else if(i===next){chips[i].textContent="\u2192 "+(i+1)+". "+S[i].n+" \u00B7 Up next";chips[i].setAttribute("aria-label",S[i].n+", up next");chips[i].setAttribute("aria-current","step");}
 else{chips[i].textContent="\u25CB "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", not started");chips[i].removeAttribute("aria-current");}
-if(d)n++;});
-var pct=Math.round(n/S.length*100);
-pt.textContent=n+" of "+S.length+" stages \u00B7 "+pct+"%";pb.style.width=pct+"%";
-pbar.setAttribute("aria-valuenow",String(pct));pbar.setAttribute("aria-valuetext",n+" of "+S.length+" stages completed, "+pct+" percent");
+});
 if(next>=0){contText.textContent="Up next: "+(next+1)+". "+S[next].n;contBtn.innerHTML="Continue \u2192";contBtn.setAttribute("aria-label","Continue to "+(next+1)+". "+S[next].n);}
 else{contText.textContent="All "+S.length+" stages completed";contBtn.innerHTML="Review from the start \u2192";contBtn.setAttribute("aria-label","All stages completed. Review from the start.");}}
 function save(){try{localStorage.setItem(K,JSON.stringify(done));}catch(e){}}
