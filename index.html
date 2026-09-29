@@ -67,7 +67,10 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .mark input:checked::after{content:"\2713";color:var(--onacc);font-size:.9rem;font-weight:800;line-height:1}
 .mark input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .mark-txt{font-size:.92rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;align-items:stretch}
+.grid>:only-child{max-width:min(100%,640px)}
+@media(min-width:1024px){.grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
 .card{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
 .card.main{border-top:4px solid var(--acc)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
@@ -84,7 +87,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 #coupons{margin-top:40px;padding:clamp(16px,2.5vw,28px);background:var(--soft);border:1.5px solid var(--acc);border-radius:16px}
 #coupons h2{margin:0 0 6px;font-size:clamp(1.15rem,1vw + 1rem,1.5rem)}
 #coupons>p{color:var(--mute);margin:0 0 14px;max-width:70ch}
-.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
 .ar{direction:rtl;text-align:right;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .ar h2{font-size:1.1rem;margin:0 0 6px}.ar p{color:var(--mute);margin:0}
 #cs{min-height:1.5em;color:var(--mute);margin:10px 0 0}
