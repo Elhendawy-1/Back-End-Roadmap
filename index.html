@@ -69,11 +69,14 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .mark-txt{font-size:.92rem}
 .grid{display:grid;gap:14px;align-items:stretch}
 .cols-1{grid-template-columns:minmax(0,1fr)}
-.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.cols-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.cols-3{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.cgrid{display:grid;gap:14px}
+.cgrid.cols-1{grid-template-columns:minmax(0,1fr)}
+.cgrid.cols-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.cgrid.cols-3{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
 @media(min-width:1024px){.grid{gap:16px}}
-@media(max-width:1023px){.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.cols-1,.cols-2,.cols-3{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){.cols-1,.cols-2,.cols-3,.cgrid.cols-1,.cgrid.cols-2,.cgrid.cols-3{grid-template-columns:minmax(0,1fr)}}
 .card{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--sh)}
 .card.main{border-top:4px solid var(--acc)}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
@@ -90,7 +93,6 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 #coupons{margin-top:40px;padding:clamp(16px,2.5vw,28px);background:var(--soft);border:1.5px solid var(--acc);border-radius:16px}
 #coupons h2{margin:0 0 6px;font-size:clamp(1.15rem,1vw + 1rem,1.5rem)}
 #coupons>p{color:var(--mute);margin:0 0 14px;max-width:70ch}
-.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
 .ar{direction:rtl;text-align:right;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .ar h2{font-size:1.1rem;margin:0 0 6px}.ar p{color:var(--mute);margin:0}
 #cs{min-height:1.5em;color:var(--mute);margin:10px 0 0}
@@ -194,9 +196,11 @@ var l=el("a","btn",label(r)+" \u2192");l.href=r[1];l.target="_blank";l.rel="noop
 a.appendChild(l);card.appendChild(a);g.appendChild(card);});
 st.appendChild(g);root.appendChild(st);});
 var cg=document.getElementById("cg");
-["SUPPORT25%","SUPPORT50%","SUPPORT75%","SUPPORT100%"].forEach(function(k){
+var codes=["SUPPORT25%","SUPPORT50%","SUPPORT75%","SUPPORT100%"];
+codes.forEach(function(k){
 var c=el("div","card");c.appendChild(el("p","lbl","Coupon"));c.appendChild(el("div","code",k));
 var a=el("div","acts");a.appendChild(copyBtn(k,"Copy Coupon"));c.appendChild(a);cg.appendChild(c);});
+cg.className="cgrid cols-"+(codes.length===4?2:Math.min(codes.length,3));
 var K="roadmap-progress-v1",done={};
 try{done=JSON.parse(localStorage.getItem(K)||"{}")||{};}catch(e){done={};}
 var cbs=root.querySelectorAll("input[data-i]"),chips=nav.querySelectorAll(".chip"),stg=root.querySelectorAll(".stage");
