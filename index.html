@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>.NET Backend Developer Roadmap</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%230b1020'/%3E%3Cpath d='M4 22 H11 V15 H17' fill='none' stroke='%238fa3ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='4' cy='22' r='2.4' fill='%238fa3ff'/%3E%3Ccircle cx='17' cy='15' r='2.4' fill='%238fa3ff'/%3E%3Cpath d='M21 10 l2 2 3.5-5' fill='none' stroke='%238fa3ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
 :root{--bg:#f5f6fa;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#dfe3ec;--acc:#4338ca;--onacc:#fff;--soft:#eef0f8;--paid:#8a4205;--paidbg:#fdecd8;--sh:0 1px 2px rgba(17,24,39,.06);
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
@@ -14,7 +15,11 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);-webkit-text-s
 body{margin:0;background:var(--bg);color:var(--ink);font:clamp(15px,.4vw + 14px,17px)/1.6 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;overflow-x:hidden}
 .topbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
 .bar2{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px!important;padding-bottom:8px!important}
-.brand{font-size:1.05rem;font-weight:800;letter-spacing:-.01em;overflow-wrap:anywhere}
+.brand{display:inline-flex;align-items:center;gap:9px;font-size:1.05rem;font-weight:800;letter-spacing:-.01em;overflow-wrap:anywhere;min-width:0}
+.logo{flex:none;display:block}
+.logo .path{fill:none;stroke:var(--acc);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.logo .node{fill:var(--acc)}
+.logo .tick{fill:none;stroke:var(--acc);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);flex:none}
 .seg button{min-height:44px;min-width:44px;padding:8px 14px;border:0;background:transparent;color:var(--mute);font:600 .9rem/1 inherit;font-family:inherit;cursor:pointer}
 .seg button+button{border-inline-start:1.5px solid var(--line)}
@@ -100,14 +105,14 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .ar{direction:rtl;text-align:right;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .ar h2{font-size:1.1rem;margin:0 0 6px}.ar p{color:var(--mute);margin:0}
 #cs{min-height:1.5em;color:var(--mute);margin:10px 0 0}
-@media (max-width:560px){.acts .btn,.tools .btn{flex:1 1 100%}.stage h2{gap:8px}.seg button{padding:8px 11px}.contbar{flex-direction:column;align-items:stretch}.contbar .btn{width:100%}}
+@media (max-width:560px){.acts .btn{flex:1 1 100%}#q{flex:1 1 100%}.prog{flex:1 1 0;min-width:0}#reset{flex:1 1 auto;white-space:nowrap}.stage h2{gap:8px}.seg button{padding:8px 11px}.contbar{flex-direction:column;align-items:stretch}.contbar .btn{width:100%}}
 @media (max-width:768px){.topbar{position:static}.tools{position:sticky;top:0;z-index:6}}
 @media (max-width:480px){.bar2{flex-wrap:wrap}.brand{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<div class="topbar"><div class="wrap bar2"><strong class="brand">.NET Roadmap</strong><div class="seg" role="group" aria-label="Color theme"><button type="button" data-t="light" aria-pressed="false">&#9728; Light</button><button type="button" data-t="dark" aria-pressed="false">&#9790; Night</button></div></div></div>
+<div class="topbar"><div class="wrap bar2"><strong class="brand"><svg class="logo" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path class="path" d="M4 22 H11 V15 H17"/><circle class="node" cx="4" cy="22" r="2.4"/><circle class="node" cx="17" cy="15" r="2.4"/><path class="tick" d="M21 10 l2 2 3.5-5"/></svg><span>.NET Roadmap</span></strong><div class="seg" role="group" aria-label="Color theme"><button type="button" data-t="light" aria-pressed="false">&#9728; Light</button><button type="button" data-t="dark" aria-pressed="false">&#9790; Night</button></div></div></div>
 <div class="wrap">
 <header><h1>.NET Backend Developer Roadmap</h1>
 <p class="lead">Nine stages from computer science fundamentals to ASP.NET Core. Each stage lists a main resource, alternatives and practice. Where a lesson list was not readable, the card says so.</p></header>
