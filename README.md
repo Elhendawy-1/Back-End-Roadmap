@@ -42,6 +42,7 @@ A dedicated section holds coupon codes for Eng. Mohamed Abu Hadhoud's courses on
 ## Features
 
 - Continue banner that names the next unfinished stage
+- Login gate: username + password accounts with per-user progress
 - Stage navigation with completed (✓), up-next (→), and upcoming (○) states
 - Search across stages, descriptions, and resource cards
 - "Mark stage complete" toggles with a completed medallion per stage
@@ -56,7 +57,7 @@ A dedicated section holds coupon codes for Eng. Mohamed Abu Hadhoud's courses on
 
 ## Progress System
 
-Progress is a simple per-stage checklist stored in the browser's **localStorage** under the key `roadmap-progress-v1`. Theme choice is stored as `roadmap-theme`. There is no account, server, or database — clearing browser storage removes progress and settings.
+Progress is a simple per-stage checklist stored in the browser's **localStorage**. Each logged-in user gets their own progress under `roadmap-progress-v1_<username>`; accounts live under `roadmap-users-v1` (passwords stored salted and SHA-256 hashed, never plaintext) and the session under `roadmap-session-v1`. If you used the site before logging in, your existing shared progress is copied into your account once on first login. Theme choice is stored as `roadmap-theme`. There is no server or database — clearing browser storage removes accounts, progress, and settings.
 
 ## Technology Stack
 
@@ -86,11 +87,12 @@ No build step and no server required:
 
 ## Usage
 
-1. Follow the Continue banner — it always points at your next unfinished stage.
-2. Open a resource card button to start learning (links open in a new tab).
-3. Tick "Mark stage complete" as you finish each stage; progress saves automatically.
-4. Use search or the stage pills to jump around; switch Light/Night from the top bar.
-5. Reset progress needs two taps to confirm.
+1. Sign up with a username and password (stored only in your browser), then log in.
+2. Follow the Continue banner — it always points at your next unfinished stage.
+3. Open a resource card button to start learning (links open in a new tab).
+4. Tick "Mark stage complete" as you finish each stage; progress saves automatically.
+5. Use search or the stage pills to jump around; switch Light/Night from the top bar.
+6. Log out from the user chip next to Reset; Reset progress needs two taps and clears only your own progress.
 
 ## Contributing
 

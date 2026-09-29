@@ -13,10 +13,10 @@
 <meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%230b1020'/%3E%3Cpath d='M4 22 H11 V15 H17' fill='none' stroke='%238fa3ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='4' cy='22' r='2.4' fill='%238fa3ff'/%3E%3Ccircle cx='17' cy='15' r='2.4' fill='%238fa3ff'/%3E%3Cpath d='M21 10 l2 2 3.5-5' fill='none' stroke='%238fa3ff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#f5f6fa;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#dfe3ec;--acc:#4338ca;--onacc:#fff;--soft:#eef0f8;--paid:#8a4205;--paidbg:#fdecd8;--sh:0 1px 2px rgba(17,24,39,.06);--tr:.18s ease;
+:root{--bg:#f5f6fa;--card:#fff;--ink:#111827;--mute:#4b5563;--line:#dfe3ec;--acc:#4338ca;--onacc:#fff;--soft:#eef0f8;--paid:#8a4205;--paidbg:#fdecd8;--err:#b91c1c;--errbg:#fbe4e4;--sh:0 1px 2px rgba(17,24,39,.06);--tr:.18s ease;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--sh:none;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--sh:none;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--err:#f38ba8;--errbg:#2a1620;--sh:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--err:#f38ba8;--errbg:#2a1620;--sh:none;color-scheme:dark}
 html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:clamp(15px,.4vw + 14px,17px)/1.6 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;overflow-x:hidden}
@@ -56,6 +56,31 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .rescount{color:var(--mute);font-size:.85rem;margin:0 0 10px}
 .totop{position:fixed;bottom:18px;inset-inline-end:18px;z-index:50;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:1.2rem;line-height:1;cursor:pointer;box-shadow:var(--sh)}
 .totop:hover{border-color:var(--acc);color:var(--acc)}
+.auth-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg);transition:opacity var(--tr)}
+.auth-overlay.hidden{opacity:0;pointer-events:none}
+body.locked{overflow:hidden}
+body.locked .topbar,body.locked .wrap,body.locked #totop{filter:blur(6px);pointer-events:none;user-select:none}
+.auth-card{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 26px;box-shadow:var(--sh)}
+.auth-logo{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:800;letter-spacing:-.01em;margin-bottom:4px}
+.auth-sub{color:var(--mute);font-size:.85rem;margin:0 0 18px}
+.auth-tabs{display:flex;gap:8px;margin-bottom:16px}
+.auth-tab{flex:1;min-height:44px;border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--mute);font-weight:700;font-size:.85rem;cursor:pointer;font-family:inherit}
+.auth-tab.active{border-color:var(--acc);color:var(--acc);background:var(--card)}
+.auth-error{display:none;font-size:.82rem;color:var(--err);background:var(--errbg);border:1px solid var(--err);border-radius:10px;padding:8px 11px;margin-bottom:12px}
+.auth-error.show{display:block}
+.auth-field{margin-bottom:12px}
+.auth-field label{display:block;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.auth-field input{width:100%;min-height:44px;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.auth-field input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.auth-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 14px;font-size:.82rem;color:var(--mute)}
+.linkbtn{background:none;border:0;color:var(--acc);font:inherit;font-size:.82rem;cursor:pointer;min-height:44px;padding:8px 4px}
+.auth-btn{width:100%;min-height:48px;border:1.5px solid var(--acc);border-radius:10px;background:var(--acc);color:var(--onacc);font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit}
+.auth-btn:hover{filter:brightness(1.1)}
+.auth-btn:focus-visible,.auth-tab:focus-visible,.linkbtn:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.auth-hint{margin:12px 0 0;font-size:.75rem;color:var(--mute);text-align:center}
+.user-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border:1px solid var(--line);border-radius:99px;background:var(--bg);font-size:.82rem;color:var(--mute)}
+.user-chip strong{color:var(--acc)}
+.user-chip .btn{min-height:36px;padding:4px 12px;font-size:.8rem}
 .stage{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh);padding:clamp(16px,3vw,26px);margin:0 0 28px}
 .stage .card{background:var(--bg)}
 .stage .mark{background:var(--bg)}
@@ -114,12 +139,41 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 </style>
 </head>
 <body>
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="auth-logo" id="authTitle"><svg class="logo" width="30" height="30" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path class="path" d="M4 22 H11 V15 H17"/><circle class="node" cx="4" cy="22" r="2.4"/><circle class="node" cx="17" cy="15" r="2.4"/><path class="tick" d="M21 10 l2 2 3.5-5"/></svg><span>.NET Roadmap</span></div>
+    <p class="auth-sub">Login to access your roadmap</p>
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab active" id="tabLogin" role="tab" type="button" onclick="switchAuthTab('login')">Login</button>
+      <button class="auth-tab" id="tabSignup" role="tab" type="button" onclick="switchAuthTab('signup')">Sign Up</button>
+    </div>
+    <div class="auth-error" id="authError" role="alert"></div>
+    <div class="auth-field">
+      <label for="authUser">Username</label>
+      <input type="text" id="authUser" placeholder="e.g. ahmed_dev" autocomplete="username" maxlength="32">
+    </div>
+    <div class="auth-field">
+      <label for="authPass">Password</label>
+      <input type="password" id="authPass" placeholder="Min 6 characters" autocomplete="current-password" maxlength="128">
+    </div>
+    <div class="auth-field" id="confirmWrap" style="display:none">
+      <label for="authConfirm">Confirm Password</label>
+      <input type="password" id="authConfirm" placeholder="Repeat password" autocomplete="new-password" maxlength="128">
+    </div>
+    <div class="auth-row">
+      <span id="authModeHint">Welcome back</span>
+      <button type="button" class="linkbtn" onclick="toggleAuthPassword(this)">Show password</button>
+    </div>
+    <button class="auth-btn" id="authSubmit" type="button" onclick="submitAuth()">Login</button>
+    <p class="auth-hint">Accounts are stored only in this browser.</p>
+  </div>
+</div>
 <div class="topbar"><div class="wrap bar2"><strong class="brand"><svg class="logo" width="28" height="28" viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path class="path" d="M4 22 H11 V15 H17"/><circle class="node" cx="4" cy="22" r="2.4"/><circle class="node" cx="17" cy="15" r="2.4"/><path class="tick" d="M21 10 l2 2 3.5-5"/></svg><span>.NET Roadmap</span></strong><div class="seg" role="group" aria-label="Color theme"><button type="button" data-t="light" aria-pressed="false">&#9728; Light</button><button type="button" data-t="dark" aria-pressed="false">&#9790; Night</button></div></div></div>
 <div class="wrap">
 <header><h1>.NET Backend Developer Roadmap</h1>
 <p class="lead">Nine stages from computer science fundamentals to ASP.NET Core. Each stage lists a main resource, alternatives and practice. Where a lesson list was not readable, the card says so.</p></header>
 <div class="contbar" id="contbar"><span id="contText" role="status" aria-live="polite"></span><button id="cont" class="btn" type="button">Continue</button></div>
-<div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><button id="reset" class="btn ghost" type="button">Reset progress</button></div>
+<div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><button id="reset" class="btn ghost" type="button">Reset progress</button><div class="user-chip" id="userChip" style="display:none"><span aria-hidden="true">👤</span>&nbsp;<strong id="userName"></strong><button class="btn ghost" id="logoutBtn" type="button" onclick="handleLogout()">Logout</button></div></div>
 <p id="empty" class="lead" role="status" hidden>No resources match your search.</p>
 <nav id="nav" aria-label="Roadmap stages"></nav>
 <main id="stages"></main>
@@ -212,8 +266,66 @@ codes.forEach(function(k){
 var c=el("div","card");c.appendChild(el("p","lbl","Coupon"));c.appendChild(el("div","code",k));
 var a=el("div","acts");a.appendChild(copyBtn(k,"Copy Coupon"));c.appendChild(a);cg.appendChild(c);});
 cg.className="cgrid cols-"+(codes.length===4?2:Math.min(codes.length,3));
-var K="roadmap-progress-v1",done={};
-try{done=JSON.parse(localStorage.getItem(K)||"{}")||{};}catch(e){done={};}
+var BASE_K="roadmap-progress-v1",USERS_K="roadmap-users-v1",SESSION_K="roadmap-session-v1";
+var currentUserKey=null,currentUserDisplay="",authMode="login",done={};
+function progressKey(){return currentUserKey?BASE_K+"_"+currentUserKey:BASE_K;}
+function loadKey(k){try{return JSON.parse(localStorage.getItem(k))||{};}catch(e){return{};}}
+function load(){var d=loadKey(progressKey());if(currentUserKey&&!Object.keys(d).length){var legacy=loadKey(BASE_K);if(Object.keys(legacy).length){d=legacy;try{localStorage.setItem(progressKey(),JSON.stringify(d));}catch(e){}}}return d;}
+done=load();
+function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_K))||{};}catch(e){return{};}}
+function saveUsers(u){try{localStorage.setItem(USERS_K,JSON.stringify(u));}catch(e){}}
+function makeSalt(){try{var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(b){return ("0"+b.toString(16)).slice(-2);}).join("");}catch(e){return ""+Date.now()+Math.random();}}
+function hashPassword(pass,salt){
+try{
+if(window.crypto&&crypto.subtle){
+var data=new TextEncoder().encode(salt+":"+pass);
+return crypto.subtle.digest("SHA-256",data).then(function(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ("0"+b.toString(16)).slice(-2);}).join("");});
+}
+}catch(e){}
+var h1=0xdeadbeef,h2=0x41c6ce57,s=salt+":"+pass;
+for(var i=0;i<s.length;i++){var ch=s.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
+h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+return Promise.resolve((h2>>>0).toString(16)+(h1>>>0).toString(16));
+}
+function showAuthError(m){var e=document.getElementById("authError");e.textContent=m;e.classList.add("show");}
+function clearAuthError(){document.getElementById("authError").classList.remove("show");}
+function switchAuthTab(mode){authMode=mode;clearAuthError();
+document.getElementById("tabLogin").classList.toggle("active",mode==="login");
+document.getElementById("tabSignup").classList.toggle("active",mode==="signup");
+document.getElementById("confirmWrap").style.display=mode==="signup"?"":"none";
+document.getElementById("authModeHint").textContent=mode==="signup"?"Create your account":"Welcome back";
+document.getElementById("authSubmit").textContent=mode==="signup"?"Sign Up":"Login";}
+function toggleAuthPassword(btn){var p=document.getElementById("authPass"),c=document.getElementById("authConfirm"),show=p.type==="password";p.type=show?"text":"password";c.type=show?"text":"password";if(btn)btn.textContent=show?"Hide password":"Show password";}
+function lockUI(){document.getElementById("authOverlay").classList.remove("hidden");document.body.classList.add("locked");document.getElementById("userChip").style.display="none";}
+function unlockUI(){document.getElementById("authOverlay").classList.add("hidden");document.body.classList.remove("locked");var chip=document.getElementById("userChip");chip.style.display="";document.getElementById("userName").textContent=currentUserDisplay;document.getElementById("authPass").value="";document.getElementById("authConfirm").value="";}
+function submitAuth(){clearAuthError();
+var rawU=document.getElementById("authUser").value.trim(),pass=document.getElementById("authPass").value,confirm=document.getElementById("authConfirm").value;
+if(!/^[A-Za-z0-9_.]{3,32}$/.test(rawU)){showAuthError("Username: 3-32 chars, letters/numbers/._ only.");return Promise.resolve();}
+if(pass.length<6){showAuthError("Password must be at least 6 characters.");return Promise.resolve();}
+var key=rawU.toLowerCase(),users=getUsers();
+if(authMode==="signup"){
+if(pass!==confirm){showAuthError("Passwords do not match.");return Promise.resolve();}
+if(users[key]){showAuthError("Username already taken. Try Login instead.");return Promise.resolve();}
+var salt=makeSalt();
+return hashPassword(pass,salt).then(function(hash){users[key]={display:rawU,passHash:hash,salt:salt,createdAt:Date.now()};saveUsers(users);return enterAs(key,rawU);});
+}
+var rec=users[key];
+if(!rec){showAuthError("Account not found. Switch to Sign Up.");return Promise.resolve();}
+return hashPassword(pass,rec.salt).then(function(hash){
+if(hash!==rec.passHash){showAuthError("Wrong password. Try again.");return;}
+enterAs(key,rec.display||rawU);});
+}
+function enterAs(key,display){currentUserKey=key;currentUserDisplay=display;
+try{localStorage.setItem(SESSION_K,JSON.stringify({u:key,d:display}));}catch(e){}
+done=load();unlockUI();paint();}
+function handleLogout(){try{localStorage.removeItem(SESSION_K);}catch(e){}
+currentUserKey=null;currentUserDisplay="";done={};paint();
+document.getElementById("authUser").value="";document.getElementById("authPass").value="";document.getElementById("authConfirm").value="";
+switchAuthTab("login");lockUI();}
+function checkSession(){var s=null;try{s=JSON.parse(localStorage.getItem(SESSION_K))||null;}catch(e){}var users=getUsers();
+if(s&&s.u&&users[s.u]){enterAs(s.u,users[s.u].display||s.d||s.u);return true;}
+currentUserKey=null;done={};lockUI();paint();return false;}
 var cbs=root.querySelectorAll("input[data-i]"),chips=nav.querySelectorAll(".chip"),stg=root.querySelectorAll(".stage");
 var qe=document.getElementById("q"),em=document.getElementById("empty");
 function getNextStage(){for(var i=0;i<S.length;i++){if(!done[i])return i;}return -1;}
@@ -225,7 +337,7 @@ else{chips[i].textContent="\u25CB "+(i+1)+". "+S[i].n;chips[i].setAttribute("ari
 });
 if(next>=0){contText.textContent="Up next: "+(next+1)+". "+S[next].n;contBtn.innerHTML="Continue \u2192";contBtn.setAttribute("aria-label","Continue to "+(next+1)+". "+S[next].n);}
 else{contText.textContent="All "+S.length+" stages completed";contBtn.innerHTML="Review from the start \u2192";contBtn.setAttribute("aria-label","All stages completed. Review from the start.");}}
-function save(){try{localStorage.setItem(K,JSON.stringify(done));}catch(e){}}
+function save(){try{localStorage.setItem(progressKey(),JSON.stringify(done));}catch(e){}}
 cbs.forEach(function(c){c.addEventListener("change",function(){var i=+c.getAttribute("data-i");if(c.checked)done[i]=1;else delete done[i];save();paint();});});
 contBtn.addEventListener("click",function(){
 var nx=getNextStage();qe.value="";filter();
@@ -243,12 +355,13 @@ cg.querySelectorAll(".card").forEach(function(c){var ok=!q||c.textContent.toLowe
 csec.hidden=!cmatch;if(cmatch)any++;
 em.hidden=!!any;}
 qe.addEventListener("input",filter);
+["authUser","authPass","authConfirm"].forEach(function(id){document.getElementById(id).addEventListener("keydown",function(e){if(e.key==="Enter")submitAuth();});});
 function setPad(){var t=document.querySelector(".tools");if(window.innerWidth<=768&&t){var h=Math.ceil(t.getBoundingClientRect().height+12);document.documentElement.style.scrollPaddingTop="calc(env(safe-area-inset-top,0px) + "+h+"px)";}else{document.documentElement.style.scrollPaddingTop="";}}
 window.addEventListener("resize",setPad);setPad();
 var totop=document.getElementById("totop");
 window.addEventListener("scroll",function(){totop.hidden=window.scrollY<600;},{passive:true});
 totop.addEventListener("click",function(){window.scrollTo(0,0);});
-paint();
+checkSession();
 var rt=document.documentElement,tb=document.querySelectorAll("[data-t]"),mq=window.matchMedia("(prefers-color-scheme:dark)");
 function setT(t,keep){rt.setAttribute("data-theme",t);tb.forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-t")===t));});if(keep){try{localStorage.setItem("roadmap-theme",t);}catch(e){}}}
 var t0=null;try{t0=localStorage.getItem("roadmap-theme");}catch(e){}
