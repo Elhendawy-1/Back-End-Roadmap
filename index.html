@@ -9,7 +9,7 @@
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--sh:none;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0b1020;--card:#131a2e;--ink:#e8ecf8;--mute:#a4aec6;--line:#27324d;--acc:#8fa3ff;--onacc:#0b1020;--soft:#1b2440;--paid:#f5b877;--paidbg:#3a2a17;--sh:none;color-scheme:dark}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);-webkit-text-size-adjust:100%}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:clamp(15px,.4vw + 14px,17px)/1.6 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;overflow-x:hidden}
 .topbar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
@@ -29,7 +29,7 @@ h1{font-size:clamp(1.6rem,2.6vw + 1rem,2.6rem);line-height:1.12;letter-spacing:-
 .btn:hover{filter:brightness(1.1)}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .btn.ghost:hover{background:var(--soft);border-color:var(--acc);filter:none}
-.btn:focus-visible,.chip:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.btn:focus-visible,.chip:focus-visible,.totop:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 16px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh)}
 #q{flex:1 1 240px;min-width:0;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
 #q:focus-visible,.mark input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
@@ -41,6 +41,12 @@ h1{font-size:clamp(1.6rem,2.6vw + 1rem,2.6rem);line-height:1.12;letter-spacing:-
 nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .chip{display:inline-flex;align-items:center;min-height:40px;padding:6px 14px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:var(--ink);text-decoration:none;font-size:.9rem}
 .chip:hover{border-color:var(--acc);color:var(--acc)}
+.chip.next{border-color:var(--acc);color:var(--acc)}
+.contbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-inline-start:4px solid var(--acc);border-radius:14px;box-shadow:var(--sh);padding:14px 16px;margin:0 0 14px}
+.contbar span{font-weight:700;overflow-wrap:anywhere}
+.rescount{color:var(--mute);font-size:.85rem;margin:0 0 10px}
+.totop{position:fixed;bottom:18px;inset-inline-end:18px;z-index:50;width:48px;height:48px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:1.2rem;line-height:1;cursor:pointer;box-shadow:var(--sh)}
+.totop:hover{border-color:var(--acc);color:var(--acc)}
 .stage{margin:0 0 36px}
 .stage h2{display:flex;gap:12px;align-items:center;font-size:clamp(1.15rem,1vw + 1rem,1.5rem);line-height:1.25;margin:0 0 8px;letter-spacing:-.01em}
 .num{display:inline-grid;place-items:center;min-width:2.3rem;height:2.3rem;padding:0 6px;border-radius:10px;background:var(--soft);color:var(--acc);font-weight:800;font-size:1rem;flex:none}
@@ -70,8 +76,10 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 .ar{direction:rtl;text-align:right;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .ar h2{font-size:1.1rem;margin:0 0 6px}.ar p{color:var(--mute);margin:0}
 #cs{min-height:1.5em;color:var(--mute);margin:10px 0 0}
-@media (max-width:560px){.acts .btn,.tools .btn{flex:1 1 100%}.stage h2{gap:8px}.seg button{padding:8px 11px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (max-width:560px){.acts .btn,.tools .btn{flex:1 1 100%}.stage h2{gap:8px}.seg button{padding:8px 11px}.contbar{flex-direction:column;align-items:stretch}.contbar .btn{width:100%}}
+@media (max-width:768px){.topbar{position:static}.tools{position:sticky;top:0;z-index:6}}
+@media (max-width:480px){.bar2{flex-wrap:wrap}.brand{font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -79,7 +87,8 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 <div class="wrap">
 <header><h1>.NET Backend Developer Roadmap</h1>
 <p class="lead">Nine stages from computer science fundamentals to ASP.NET Core. Each stage lists a main resource, alternatives and practice. Where a lesson list was not readable, the card says so.</p></header>
-<div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><div class="prog"><span id="pt" role="status" aria-live="polite">0 of 9 stages done</span><div class="bar" aria-hidden="true"><i id="pb"></i></div></div><button id="cont" class="btn" type="button">Continue</button><button id="reset" class="btn ghost" type="button">Reset progress</button></div>
+<div class="contbar" id="contbar"><span id="contText" role="status" aria-live="polite"></span><button id="cont" class="btn" type="button">Continue</button></div>
+<div class="tools"><label class="sr" for="q">Search resources</label><input id="q" type="search" placeholder="Search courses, platforms, topics" autocomplete="off"><div class="prog"><span id="pt" role="status" aria-live="polite">0 of 9 stages done</span><div class="bar" id="pbar" role="progressbar" aria-label="Roadmap progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0 of 9 stages completed, 0 percent"><i id="pb"></i></div></div><button id="reset" class="btn ghost" type="button">Reset progress</button></div>
 <p id="empty" class="lead" hidden>No resources match your search.</p>
 <nav id="nav" aria-label="Roadmap stages"></nav>
 <main id="stages"></main>
@@ -93,6 +102,7 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 28px}
 <p>استخدم أي كود من دول وقت الدفع على programmingadvices.com. اضغط على نسخ الكود. راجع السعر النهائي في صفحة الدفع.</p></div>
 </section>
 </div>
+<button id="totop" class="totop" type="button" aria-label="Back to top" hidden>↑</button>
 <script>
 var PA="https://programmingadvices.com/p/",YT="https://www.youtube.com/playlist?list=";
 var S=[
@@ -144,6 +154,7 @@ var c=el("a","chip",(i+1)+". "+s.n);c.href="#"+id;nav.appendChild(c);
 var st=el("section","stage");st.id=id;st.setAttribute("aria-labelledby",id+"-h");
 var h=el("h2");h.id=id+"-h";h.appendChild(el("span","num",String(i+1)));h.appendChild(el("span","",s.n));st.appendChild(h);
 st.appendChild(el("p","desc",s.d));
+var rc=s.r.length;st.appendChild(el("p","rescount",rc===0?"No resources yet":rc+(rc===1?" resource":" resources")));
 var m=el("label","mark"),cb=document.createElement("input");cb.type="checkbox";cb.setAttribute("data-i",i);m.appendChild(cb);m.appendChild(el("span","","Mark stage complete"));st.appendChild(m);
 var g=el("div","grid");
 s.r.forEach(function(r){
@@ -170,13 +181,23 @@ var K="roadmap-progress-v1",done={};
 try{done=JSON.parse(localStorage.getItem(K)||"{}")||{};}catch(e){done={};}
 var cbs=root.querySelectorAll("input[data-i]"),chips=nav.querySelectorAll(".chip"),stg=root.querySelectorAll(".stage");
 var pt=document.getElementById("pt"),pb=document.getElementById("pb"),qe=document.getElementById("q"),em=document.getElementById("empty");
-function paint(){var n=0;cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);chips[i].textContent=(d?"\u2713 ":"")+(i+1)+". "+S[i].n;if(d)n++;});
-pt.textContent=n+" of "+S.length+" stages done";pb.style.width=(n/S.length*100)+"%";}
+function getNextStage(){for(var i=0;i<S.length;i++){if(!done[i])return i;}return -1;}
+var contText=document.getElementById("contText"),contBtn=document.getElementById("cont"),pbar=document.getElementById("pbar");
+function paint(){var n=0,next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);
+if(d){chips[i].textContent="\u2713 "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", completed");chips[i].removeAttribute("aria-current");}
+else if(i===next){chips[i].textContent="\u2192 "+(i+1)+". "+S[i].n+" \u00B7 Up next";chips[i].setAttribute("aria-label",S[i].n+", up next");chips[i].setAttribute("aria-current","step");}
+else{chips[i].textContent="\u25CB "+(i+1)+". "+S[i].n;chips[i].setAttribute("aria-label",S[i].n+", not started");chips[i].removeAttribute("aria-current");}
+if(d)n++;});
+var pct=Math.round(n/S.length*100);
+pt.textContent=n+" of "+S.length+" stages \u00B7 "+pct+"%";pb.style.width=pct+"%";
+pbar.setAttribute("aria-valuenow",String(pct));pbar.setAttribute("aria-valuetext",n+" of "+S.length+" stages completed, "+pct+" percent");
+if(next>=0){contText.textContent="Up next: "+(next+1)+". "+S[next].n;contBtn.innerHTML="Continue \u2192";contBtn.setAttribute("aria-label","Continue to "+(next+1)+". "+S[next].n);}
+else{contText.textContent="All "+S.length+" stages completed";contBtn.innerHTML="Review from the start \u2192";contBtn.setAttribute("aria-label","All stages completed. Review from the start.");}}
 function save(){try{localStorage.setItem(K,JSON.stringify(done));}catch(e){}}
 cbs.forEach(function(c){c.addEventListener("change",function(){var i=+c.getAttribute("data-i");if(c.checked)done[i]=1;else delete done[i];save();paint();});});
-document.getElementById("cont").addEventListener("click",function(){
-for(var i=0;i<stg.length;i++){if(!done[i]){qe.value="";filter();stg[i].scrollIntoView();return;}}
-pt.textContent="All "+S.length+" stages done";});
+contBtn.addEventListener("click",function(){
+var nx=getNextStage();qe.value="";filter();
+if(nx>=0){stg[nx].scrollIntoView();}else{stg[0].scrollIntoView();}});
 var rb=document.getElementById("reset"),rt2=null;
 rb.addEventListener("click",function(){
 if(rb.getAttribute("data-c")){done={};save();paint();rb.removeAttribute("data-c");rb.textContent="Reset progress";clearTimeout(rt2);return;}
@@ -187,6 +208,11 @@ st.querySelectorAll(".card").forEach(function(c){var ok=sm||c.textContent.toLowe
 st.hidden=!v;chips[i].hidden=!v;if(v)any++;});
 em.hidden=!!any;}
 qe.addEventListener("input",filter);
+function setPad(){var t=document.querySelector(".tools");if(window.innerWidth<=768&&t){var h=Math.ceil(t.getBoundingClientRect().height+12);document.documentElement.style.scrollPaddingTop="calc(env(safe-area-inset-top,0px) + "+h+"px)";}else{document.documentElement.style.scrollPaddingTop="";}}
+window.addEventListener("resize",setPad);setPad();
+var totop=document.getElementById("totop");
+window.addEventListener("scroll",function(){totop.hidden=window.scrollY<600;},{passive:true});
+totop.addEventListener("click",function(){window.scrollTo(0,0);});
 paint();
 var rt=document.documentElement,tb=document.querySelectorAll("[data-t]"),mq=window.matchMedia("(prefers-color-scheme:dark)");
 function setT(t,keep){rt.setAttribute("data-theme",t);tb.forEach(function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-t")===t));});if(keep){try{localStorage.setItem("roadmap-theme",t);}catch(e){}}}
