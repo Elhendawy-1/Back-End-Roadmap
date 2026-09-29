@@ -186,7 +186,7 @@ var m=el("label","mark"),cb=document.createElement("input");cb.type="checkbox";c
 st.appendChild(top);
 st.appendChild(el("p","desc",s.d));
 var rc=s.r.length;st.appendChild(el("p","rescount",rc===0?"No resources yet":rc+(rc===1?" resource":" resources")));
-var sp=el("div","sprog");var sb=el("div","bar");sb.id="sbar"+i;sb.setAttribute("role","progressbar");sb.setAttribute("aria-label",s.n+" progress");sb.setAttribute("aria-valuemin","0");sb.setAttribute("aria-valuemax","100");sb.setAttribute("aria-valuenow","0");sb.setAttribute("aria-valuetext",s.n+" not started, 0 percent");var fi=el("i","");fi.id="sfill"+i;sb.appendChild(fi);sp.appendChild(sb);var sx=el("span","spct","Not started \u00B7 0%");sx.id="spct"+i;sp.appendChild(sx);st.appendChild(sp);
+var sp=el("div","sprog");sp.id="sprog"+i;var sb=el("div","bar");sb.id="sbar"+i;sb.setAttribute("role","progressbar");sb.setAttribute("aria-label",s.n+" progress");sb.setAttribute("aria-valuemin","0");sb.setAttribute("aria-valuemax","100");sb.setAttribute("aria-valuenow","0");sb.setAttribute("aria-valuetext",s.n+" not started, 0 percent");var fi=el("i","");fi.id="sfill"+i;sb.appendChild(fi);sp.appendChild(sb);var sx=el("span","spct","Not started \u00B7 0%");sx.id="spct"+i;sp.appendChild(sx);st.appendChild(sp);
 var g=el("div","grid");g.className="grid cols-"+(s.r.length===4?2:Math.min(s.r.length,3));
 s.r.forEach(function(r){
 var card=el("article","card"+(r[2]==="main"?" main":""));
@@ -217,7 +217,8 @@ var qe=document.getElementById("q"),em=document.getElementById("empty");
 function getNextStage(){for(var i=0;i<S.length;i++){if(!done[i])return i;}return -1;}
 var contText=document.getElementById("contText"),contBtn=document.getElementById("cont"),pbar=document.getElementById("pbar");
 function paint(){var next=getNextStage();cbs.forEach(function(c,i){var d=!!done[i];c.checked=d;stg[i].classList.toggle("is-done",d);mts[i].textContent=d?"Completed":"Mark stage complete";
-var f=document.getElementById("sfill"+i),tx=document.getElementById("spct"+i),bb=document.getElementById("sbar"+i);
+var f=document.getElementById("sfill"+i),tx=document.getElementById("spct"+i),bb=document.getElementById("sbar"+i),sw=document.getElementById("sprog"+i);
+if(sw)sw.hidden=d;
 if(f)f.style.width=d?"100%":"0%";
 if(tx)tx.textContent=d?"Completed \u00B7 100%":"Not started \u00B7 0%";
 if(bb){bb.setAttribute("aria-valuenow",d?"100":"0");bb.setAttribute("aria-valuetext",d?S[i].n+" completed, 100 percent":S[i].n+" not started, 0 percent");}
